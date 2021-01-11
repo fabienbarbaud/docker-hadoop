@@ -2,7 +2,7 @@ version: "3"
 
 services:
   namenode:
-    image: bde2020/hadoop-namenode:2.0.0-hadoop3.2.1-java8
+    image: fabienbarbaud/hadoop-namenode:latest
     container_name: namenode
     restart: always
     ports:
@@ -16,7 +16,7 @@ services:
       - ./hadoop.env
 
   datanode:
-    image: bde2020/hadoop-datanode:2.0.0-hadoop3.2.1-java8
+    image: fabienbarbaud/hadoop-datanode:latest
     container_name: datanode
     restart: always
     volumes:
@@ -27,7 +27,7 @@ services:
       - ./hadoop.env
   
   resourcemanager:
-    image: bde2020/hadoop-resourcemanager:2.0.0-hadoop3.2.1-java8
+    image: fabienbarbaud/hadoop-resourcemanager:latest
     container_name: resourcemanager
     restart: always
     environment:
@@ -36,7 +36,7 @@ services:
       - ./hadoop.env
 
   nodemanager1:
-    image: bde2020/hadoop-nodemanager:2.0.0-hadoop3.2.1-java8
+    image: fabienbarbaud/hadoop-nodemanager:latest
     container_name: nodemanager
     restart: always
     environment:
@@ -45,13 +45,21 @@ services:
       - ./hadoop.env
   
   historyserver:
-    image: bde2020/hadoop-historyserver:2.0.0-hadoop3.2.1-java8
+    image: fabienbarbaud/hadoop-historyserver:latest
     container_name: historyserver
     restart: always
     environment:
       SERVICE_PRECONDITION: "namenode:9000 namenode:9870 datanode:9864 resourcemanager:8088"
     volumes:
       - hadoop_historyserver:/hadoop/yarn/timeline
+    env_file:
+      - ./hadoop.env
+
+  client:
+    image: fabienbarbaud/hadoop-base:latest
+    container_name: client
+    volumes:
+      - ./files:/files
     env_file:
       - ./hadoop.env
   
